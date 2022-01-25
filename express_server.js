@@ -11,6 +11,10 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+const generateRandomString = () => {
+  return Math.floor((1 + Math.random()) * 0x1000000).toString(16).substring(1);
+}
+
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
@@ -49,3 +53,9 @@ app.get("/set", (req, res) => {
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
   res.render("urls_show", templateVars);
 });
+
+app.post("/urls", (req, res) => {
+  console.log(req.body);  // Log the POST request body to the console
+  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+});
+
