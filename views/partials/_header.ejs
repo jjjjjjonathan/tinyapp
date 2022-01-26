@@ -15,7 +15,7 @@
       
       <form action="/login" class="form-inline" method="POST">
         <div class="form-group">
-          <input type="text" class="form-control" name="username" style="width: 200px; margin: 1em" placeholder="Username...">
+          <input type="text" class="form-control mx-2" name="username" style="width: 200px" placeholder="Username...">
           <button type="submit" class="btn btn-success">Login</button>
         </div>
       </form>
@@ -23,7 +23,7 @@
     <% } else { %>
       <form action="/logout" class="form-inline" method="POST">
         <div class="form-group">
-          <label for="staticUsernameInfo" class="text-light">Logged in as: <%= username %></label>
+          <label for="staticUsernameInfo" class="text-light mx-2">Logged in as: <%= username %></label>
           <button type="submit" class="btn btn-success">Logout</button>
         </div>
       </form>
