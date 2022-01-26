@@ -45,6 +45,18 @@ const passwordLookup = (user, password) => {
   }
 };
 
+const urlsForUser = id => {
+  const userUrls = {};
+  for (const entry in urlDatabase) {
+    if (urlDatabase[entry]['userID'] === id) {
+      userUrls[entry] = {
+        longURL: urlDatabase[entry].longURL,
+        userID: urlDatabase[entry].userID
+      };
+    }
+  } return userUrls;
+};
+
 // Stuff probably that will be removed
 
 app.get("/", (req, res) => {
@@ -70,9 +82,10 @@ app.get("/urls.json", (req, res) => {
 app.get("/urls", (req, res) => {
   if (!("user_id" in req.cookies)) {
     res.redirect(403, "/login");
+  } else {
+    const templateVars = { urls: urlsForUser(req.cookies['user_id']), user: users[req.cookies['user_id']] };
+    res.render("urls_index", templateVars);
   }
-  const templateVars = { urls: urlDatabase, user: users[req.cookies['user_id']] };
-  res.render("urls_index", templateVars);
 });
 
 app.post("/urls", (req, res) => {
