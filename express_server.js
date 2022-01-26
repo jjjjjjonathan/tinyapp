@@ -78,3 +78,8 @@ app.post("/urls/:shortURL/update", (req, res) => {
   urlDatabase[req.params.shortURL] = req.body.newURL;
   res.redirect(`/urls/${req.params.shortURL}`);
 });
+
+app.post("/login", (req, res) => {
+  res.cookie("username", req.body.username);
+  res.redirect("/urls");
+});
