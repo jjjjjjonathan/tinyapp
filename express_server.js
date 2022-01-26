@@ -94,7 +94,7 @@ app.get("/urls/new", (req, res) => {
 // /urls/:shortURL
 
 app.get("/urls/:shortURL", (req, res) => {
-  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user: users[req.cookies['user_id']] };
+  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]['longURL'], user: users[req.cookies['user_id']] };
   res.render("urls_show", templateVars);
 });
 
@@ -104,15 +104,19 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 app.post("/urls/:shortURL/update", (req, res) => {
-  urlDatabase[req.params.shortURL] = req.body.newURL;
+  urlDatabase[req.params.shortURL].longURL = req.body.newURL;
   res.redirect(`/urls/${req.params.shortURL}`);
 });
 
 // Redirect to longURL
 
 app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL].longURL;
-  res.redirect(longURL);
+  if (urlDatabase[req.params.shortURL] === undefined) {
+    res.sendStatus(404);
+  } else {
+    const longURL = urlDatabase[req.params.shortURL].longURL;
+    res.redirect(longURL);
+  }
 });
 
 // /login and /logout
