@@ -19,6 +19,14 @@ const generateRandomString = () => {
   return Math.floor((1 + Math.random()) * 0x1000000).toString(16).substring(1);
 };
 
+const emailLookup = email => {
+  for (const user in users) {
+    if (users[user]['email'] === email) {
+      return true;
+    }
+  } return false;
+};
+
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
@@ -81,7 +89,7 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie("username");
+  res.clearCookie("user_id");
   res.redirect("/urls");
 });
 
@@ -91,12 +99,16 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  const newUser = generateRandomString();
-  users[newUser] = {
-    id: newUser,
-    email: req.body.email,
-    password: req.body.password
-  };
-  res.cookie("user_id", newUser);
-  res.redirect("/urls");
+  if (req.body.email === "" || req.body.password === "" || emailLookup(req.body.email)) {
+    res.sendStatus(400);
+  } else {
+    const newUser = generateRandomString();
+    users[newUser] = {
+      id: newUser,
+      email: req.body.email,
+      password: req.body.password
+    };
+    res.cookie("user_id", newUser);
+    res.redirect("/urls");
+  }
 });
