@@ -10,16 +10,13 @@
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>  
     </div>
-    
     <% if (!user) { %>
-      
-      <form action="/login" class="form-inline" method="POST">
-        <div class="form-group">
-          <input type="text" class="form-control mx-2" name="username" style="width: 200px" placeholder="Username...">
-          <button type="submit" class="btn btn-success">Login</button>
-        </div>
+      <form action="/register" method="GET">
+        <button class="btn btn-success mx-2" type="submit">Register</button>
       </form>
-      
+      <form action="/login" method="GET">
+        <button class="btn btn-success mx-2">Login</button>
+      </form>
     <% } else { %>
       <form action="/logout" class="form-inline" method="POST">
         <div class="form-group">
@@ -28,7 +25,5 @@
         </div>
       </form>
     <% } %>
-
-
   </nav>
 </header>
