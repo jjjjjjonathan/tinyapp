@@ -68,6 +68,9 @@ app.get("/urls.json", (req, res) => {
 // /urls
 
 app.get("/urls", (req, res) => {
+  if (!("user_id" in req.cookies)) {
+    res.redirect(403, "/login");
+  }
   const templateVars = { urls: urlDatabase, user: users[req.cookies['user_id']] };
   res.render("urls_index", templateVars);
 });
