@@ -8,6 +8,21 @@
     <title>Register for TinyApp</title>
   </head>
   <body>
-    
+    <header>
+      <%- include('partials/_header') %>
+    </header>
+    <main>
+      <form action="">
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" placeholder="firstname.lastname@example.com" name="email">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" name="password">
+        </div>
+        <button type="submit" class="btn btn-outline-primary">Submit</button>
+      </form>
+    </main>
   </body>
 </html>
