@@ -110,18 +110,30 @@ app.get("/urls/new", (req, res) => {
 // /urls/:shortURL
 
 app.get("/urls/:shortURL", (req, res) => {
-  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]['longURL'], user: users[req.cookies['user_id']] };
-  res.render("urls_show", templateVars);
+  if (urlDatabase[req.params.shortURL].userID !== req.cookies['user_id']) {
+    res.redirect(403, "/login");
+  } else {
+    const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]['longURL'], user: users[req.cookies['user_id']] };
+    res.render("urls_show", templateVars);
+  }
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
-  delete urlDatabase[req.params.shortURL];
-  res.redirect("/urls");
+  if (urlDatabase[req.params.shortURL].userID !== req.cookies['user_id']) {
+    res.redirect(403, "/login");
+  } else {
+    delete urlDatabase[req.params.shortURL];
+    res.redirect("/urls");
+  }
 });
 
 app.post("/urls/:shortURL/update", (req, res) => {
-  urlDatabase[req.params.shortURL].longURL = req.body.newURL;
-  res.redirect(`/urls/${req.params.shortURL}`);
+  if (urlDatabase[req.params.shortURL].userID !== req.cookies['user_id']) {
+    res.redirect(403, "/login");
+  } else {
+    urlDatabase[req.params.shortURL].longURL = req.body.newURL;
+    res.redirect(`/urls/${req.params.shortURL}`);
+  }
 });
 
 // Redirect to longURL
