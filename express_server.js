@@ -21,10 +21,12 @@ const generateRandomString = () => {
 
 const emailLookup = (email, password) => {
   for (const user in users) {
-    if (users[user]['email'] === email && password !== undefined) {
-      return passwordLookup(user, password);
-    } else {
-      return true;
+    if (users[user]['email'] === email) {
+      if (password === undefined) {
+        return true;
+      } else {
+        return passwordLookup(user, password);
+      }
     }
   } return false;
 };
@@ -94,7 +96,15 @@ app.post("/urls/:shortURL/update", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  res.cookie("username", req.body.username);
+  if (!emailLookup(req.body.email, req.body.password)) {
+    res.sendStatus(403);
+  } else {
+    for (const user in users) {
+      if (users[user].email === req.body.email) {
+        res.cookie("user_id", user);
+      }
+    }
+  }
   res.redirect("/urls");
 });
 
