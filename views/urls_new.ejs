@@ -12,15 +12,19 @@
 
   <body>
     <%- include('partials/_header') %>
-    <main style="margin: 1em;">
-      <h3>Create TinyURL</h3>
-      <form class="form-inline" action="/urls" method="POST">
-        <div class="form-group mb-2">
-          <label for="longURL">Enter a URL:</label>
-          <input class="form-control" type="url" name="longURL" placeholder="https://" style="width: 300px; margin: 1em" required="true">
+    <main>
+      <div class="container p-4">
+        <form action="/urls" method="POST">
+          <h1>Create TinyURL</h1>
+          <div class="form-group">
+            <label for="longURL">Enter a URL</label>
+            <input class="form-control" type="url" name="longURL" value="https://" required="true">
+            <small class="text-muted">URLs must include "https://" or "http://" at the beginning</small>
+          </div>
           <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
-      </form>
+        </form>
+
+      </div>
     </main>
       <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
