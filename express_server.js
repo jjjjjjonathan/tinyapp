@@ -62,7 +62,11 @@ app.listen(PORT, () => {
 // Stuff probably that will be removed
 
 app.get("/", (req, res) => {
-  res.send("Hello!");
+  if ("user_id" in req.session) {
+    res.redirect('/urls');
+  } else {
+    res.redirect('/login');
+  }
 });
 
 app.get("/hello", (req, res) => {
