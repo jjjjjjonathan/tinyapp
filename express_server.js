@@ -115,8 +115,10 @@ app.get("/urls/new", (req, res) => {
 // /urls/:shortURL
 
 app.get("/urls/:shortURL", (req, res) => {
-  if (urlDatabase[req.params.shortURL].userID !== req.cookies['user_id']) {
-    res.redirect(403, "/login");
+  if (urlDatabase[req.params.shortURL] === undefined) {
+    res.status(404).send("This page doesn't exist.");
+  } else if (urlDatabase[req.params.shortURL]["userID"] !== req.cookies['user_id']) {
+    res.status(403).send("Error code: 403\nYou can't go to URL edit pages that aren't yours or if you're not logged in.");
   } else {
     const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]['longURL'], user: users[req.cookies['user_id']] };
     res.render("urls_show", templateVars);
