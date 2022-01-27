@@ -142,7 +142,6 @@ app.post("/urls/:shortURL/update", (req, res) => {
   } else if (urlDatabase[req.params.shortURL]["userID"] !== req.cookies['user_id']) {
     res.status(403).send("Error code: 403\nYou can't go to URL edit pages that aren't yours or if you're not logged in.");
   } else {
-    console.log(req.params, req.body);
     urlDatabase[req.params.shortURL].longURL = req.body.newURL;
     res.redirect(`/urls/${req.params.shortURL}`);
   }
