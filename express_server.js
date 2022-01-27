@@ -126,8 +126,10 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
-  if (urlDatabase[req.params.shortURL].userID !== req.cookies['user_id']) {
-    res.redirect(403, "/login");
+  if (urlDatabase[req.params.shortURL] === undefined) {
+    res.status(404).send("This page doesn't exist.");
+  } else if (urlDatabase[req.params.shortURL]["userID"] !== req.cookies['user_id']) {
+    res.status(403).send("Error code: 403\nYou can't go to URL edit pages that aren't yours or if you're not logged in.");
   } else {
     delete urlDatabase[req.params.shortURL];
     res.redirect("/urls");
@@ -135,8 +137,10 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 app.post("/urls/:shortURL/update", (req, res) => {
-  if (urlDatabase[req.params.shortURL].userID !== req.cookies['user_id']) {
-    res.redirect(403, "/login");
+  if (urlDatabase[req.params.shortURL] === undefined) {
+    res.status(404).send("This page doesn't exist.");
+  } else if (urlDatabase[req.params.shortURL]["userID"] !== req.cookies['user_id']) {
+    res.status(403).send("Error code: 403\nYou can't go to URL edit pages that aren't yours or if you're not logged in.");
   } else {
     urlDatabase[req.params.shortURL].longURL = req.body.newURL;
     res.redirect(`/urls/${req.params.shortURL}`);
