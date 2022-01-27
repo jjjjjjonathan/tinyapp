@@ -57,14 +57,14 @@ const urlsForUser = id => {
   } return userUrls;
 };
 
+app.listen(PORT, () => {
+  console.log(`Tiny App listening on port ${PORT}!`);
+});
+
 // Stuff probably that will be removed
 
 app.get("/", (req, res) => {
   res.send("Hello!");
-});
-
-app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
 });
 
 app.get("/hello", (req, res) => {
@@ -81,9 +81,10 @@ app.get("/urls.json", (req, res) => {
 
 app.get("/urls", (req, res) => {
   if (!("user_id" in req.cookies)) {
-    res.redirect(403, "/login");
+    const templateVars = { user: users[req.cookies['user_id']], error: "Log in to see your URLs."};
+    res.render("login", templateVars);
   } else {
-    const templateVars = { urls: urlsForUser(req.cookies['user_id']), user: users[req.cookies['user_id']] };
+    const templateVars = { urls: urlsForUser(req.cookies['user_id']), user: users[req.cookies['user_id']], error: false };
     res.render("urls_index", templateVars);
   }
 });
@@ -178,7 +179,7 @@ app.post("/login", (req, res) => {
 
 app.post("/logout", (req, res) => {
   res.clearCookie("user_id");
-  res.redirect("/urls");
+  res.redirect("/login");
 });
 
 // /register
