@@ -3,20 +3,23 @@
   <head>
     <!--link to Bootstrap CSS-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <title>URL - TinyApp Example</title>
+    <title><%= shortURL %> - <%= longURL %></title>
   </head>
   <body>
     <header>
       <%- include('partials/_header') %>
     </header>
-    <div class="card text-center">
-      <div class="card-header"></div>
-      <div class="card-body">
-        <h5 class="card-title">TinyURL for: <%= longURL %></h5>
-        <p class="card-text">Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
+    <main>
+      <div class="container p-4">
+        <h1>TinyURL for: <%= longURL %></h1>
+        <h5>Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></h5>
+        <div class="btn-group" role="group" aria-label="Edit and delete">
+          <button type="button" class="btn btn-outline-success mx-1">Edit</button>
+          <button type="button" class="btn btn-outline-danger mx-1">Delete</button>
+        </div>
       </div>
-      <div class="card-footer text-muted"></div>
-    </div>
+    </main>
+    
     <div class="card text-center">
       <div class="card-body">
         <h5 class="card-title">Edit</h5>
