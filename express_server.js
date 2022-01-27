@@ -89,12 +89,16 @@ app.get("/urls", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  const newShortURL = generateRandomString();
-  urlDatabase[newShortURL] = {
-    longURL: req.body.longURL,
-    userID: req.cookies['user_id']
-  };
-  res.redirect(`/urls/${newShortURL}`);
+  if (req.cookies['user_id'] === undefined) {
+    res.sendStatus(403);
+  } else {
+    const newShortURL = generateRandomString();
+    urlDatabase[newShortURL] = {
+      longURL: req.body.longURL,
+      userID: req.cookies['user_id']
+    };
+    res.redirect(`/urls/${newShortURL}`);
+  }
 });
 
 // /urls/new
@@ -153,14 +157,15 @@ app.get("/login", (req, res) => {
   if ("user_id" in req.cookies) {
     res.redirect("/urls");
   } else {
-    const templateVars = { user: users[req.cookies['user_id']] };
+    const templateVars = { user: users[req.cookies['user_id']], error: false };
     res.render("login", templateVars);
   }
 });
 
 app.post("/login", (req, res) => {
   if (!emailLookup(req.body.email, req.body.password)) {
-    res.sendStatus(403);
+    const templateVars = { error: "Either your email or password is incorrect.", user: users[req.cookies['user_id']] };
+    res.render("login", templateVars);
   } else {
     for (const user in users) {
       if (users[user].email === req.body.email) {
