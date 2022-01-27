@@ -187,14 +187,18 @@ app.get("/register", (req, res) => {
   if ("user_id" in req.cookies) {
     res.redirect("/urls");
   } else {
-    const templateVars = { user: users[req.cookies['user_id']] };
+    const templateVars = { user: users[req.cookies['user_id']], error: false };
     res.render("register", templateVars);
   }
 });
 
 app.post("/register", (req, res) => {
-  if (req.body.email === "" || req.body.password === "" || emailLookup(req.body.email)) {
-    res.sendStatus(400);
+  if (req.body.email === "" || req.body.password === "") {
+    const templateVars = { user: users[req.cookies['user_id']], error: "You can't have a blank email or password field." };
+    res.render("register", templateVars);
+  } else if (emailLookup(req.body.email)) {
+    const templateVars = { user: users[req.cookies['user_id']], error: "This email has already been used for registration." };
+    res.render("register", templateVars);
   } else {
     const newUser = generateRandomString();
     users[newUser] = {
