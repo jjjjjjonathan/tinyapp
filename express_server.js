@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cookieSession = require('cookie-session');
 const bcrypt = require("bcryptjs");
+const { getUserByEmail } = require("./helpers");
 const app = express();
 app.use(cookieSession({
   name: "session",
@@ -52,14 +53,6 @@ const urlsForUser = id => {
       };
     }
   } return userUrls;
-};
-
-const getUserByEmail = (email, database) => {
-  for (const user in database) {
-    if (database[user].email === email) {
-      return user;
-    }
-  }
 };
 
 app.listen(PORT, () => {
