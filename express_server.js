@@ -1,9 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
+// const cookieParser = require("cookie-parser");
+const cookieSession = require('cookie-session');
 const bcrypt = require("bcryptjs");
 const app = express();
-app.use(cookieParser());
+// app.use(cookieParser());
+app.use(cookieSession({
+  name: "session",
+  keys: ["be28c579-2a86-447e-8481-98d59a9d4333", "f3d68b93-86f0-4f22-95e2-cc3087447f5f"]
+}));
 const PORT = 8080; // default port 8080
 
 app.set("view engine", "ejs");
