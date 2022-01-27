@@ -10,7 +10,6 @@
       <%- include('partials/_header') %>
     </header>
     <main>
-
       <div class="modal fade" id="deleteModal">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -21,8 +20,38 @@
               <p>There's no going back after this, and you'll lose the TinyURL and the statistics with it.</p>
             </div>
             <div class="modal-footer">
-              <button class="btn btn-danger" type="button">Delete anyway</button>
+              <form method="POST" action="/urls/<%= shortURL %>/delete"><button type="submit" class="btn btn-outline-danger">Delete anyway</button></form>
               <button class="btn btn-warning" type="button" data-dismiss="modal">Go back</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="editModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Edit your URL destination</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="close">&times;</button>
+            </div>
+            <div class="modal-body">
+              <form action="/urls/<%= shortURL %>/update" method="POST" id="editForm">
+                <div class="form-group row">
+                  <label for="currentURL" class="col-form-label col-sm-2">Current URL</label>
+                  <div class="com-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" value="<%= longURL %>">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="newURL" class="col-sm-2 col-form-label">New URL</label>
+                  <div class="col-sm-10">
+                    <input type="url" class="form-control" name="newURL" value="https://">
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" form="editForm">Submit</button>
             </div>
           </div>
         </div>
@@ -32,7 +61,7 @@
         <h1>TinyURL for: <%= longURL %></h1>
         <h5>Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></h5>
         <div class="btn-group pt-2" role="group" aria-label="Edit and delete">
-          <button type="button" class="btn btn-outline-success mx-1">Edit</button>
+          <button data-toggle="modal" data-target="#editModal" type="button" class="btn btn-outline-success mx-1">Edit</button>
           <button data-toggle="modal" data-target="#deleteModal" type="button" class="btn btn-outline-danger mx-1">Delete</button>
         </div>
         <h2 class="pt-5">Visitors</h2>
@@ -50,25 +79,9 @@
       </div>
     </main>
     
-    <div class="card text-center">
-      <div class="card-body">
-        <h5 class="card-title">Edit</h5>
-          <form class="form-inline justify-content-center" action="/urls/<%= shortURL %>/update" method="POST">
-            <div class="form-group">
-              <label for="newURL">Enter a new URL:</label>
-              <input class="form-control" type="url" name="newURL" placeholder="https://" style="width: 300px; margin: 1em">
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-          </form>
-      </div>
-      <div class="card-footer text-muted"></div>
-    </div>
     <!--Bootstrap JS-->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script>
-      $("#editModal").modal("toggle")
-    </script>
   </body>
 </html>
