@@ -33,7 +33,7 @@ const generateRandomString = () => {
   return Math.floor((1 + Math.random()) * 0x1000000).toString(16).substring(1);
 };
 
-const passwordLookup = (user, password) => {
+const validatePassword = (user, password) => {
   return bcrypt.compareSync(password, users[user]['password']);
 };
 
@@ -153,7 +153,7 @@ app.get("/login", (req, res) => {
 
 app.post("/login", (req, res) => {
   const user = getUserByEmail(req.body.email, users);
-  if (user === undefined || !passwordLookup(user, req.body.password)) {
+  if (user === undefined || !validatePassword(user, req.body.password)) {
     const templateVars = { error: "Either your email or password is incorrect.", user: users[req.session['user_id']] };
     res.render("login", templateVars);
   } else {
