@@ -33,26 +33,17 @@ const generateRandomString = () => {
   return Math.floor((1 + Math.random()) * 0x1000000).toString(16).substring(1);
 };
 
-const emailLookup = email => {
-  for (const user in users) {
-    if (users[user]['email'] === email) {
-      return true;
-    }
-  } return false;
+const passwordLookup = (user, password) => {
+  return bcrypt.compareSync(password, users[user]['password']);
 };
 
-const passwordLookup = (email, password) => {
-  const emailsUser = getUserByEmail(email, users);
-  return bcrypt.compareSync(password, users[emailsUser]['password']);
-};
-
-const urlsForUser = id => {
+const urlsForUser = (id, database) => {
   const userUrls = {};
-  for (const entry in urlDatabase) {
-    if (urlDatabase[entry]['userID'] === id) {
+  for (const entry in database) {
+    if (database[entry]['userID'] === id) {
       userUrls[entry] = {
-        longURL: urlDatabase[entry].longURL,
-        userID: urlDatabase[entry].userID
+        longURL: database[entry].longURL,
+        userID: database[entry].userID
       };
     }
   } return userUrls;
@@ -75,7 +66,7 @@ app.get("/urls", (req, res) => {
     const templateVars = { user: users[req.session['user_id']], error: "Log in to see your URLs."};
     res.render("login", templateVars);
   } else {
-    const templateVars = { urls: urlsForUser(req.session["user_id"]), user: users[req.session['user_id']], error: false };
+    const templateVars = { urls: urlsForUser(req.session["user_id"], urlDatabase), user: users[req.session['user_id']], error: false };
     res.render("urls_index", templateVars);
   }
 });
@@ -161,7 +152,8 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  if (!emailLookup(req.body.email) || !passwordLookup(req.body.email, req.body.password)) {
+  const user = getUserByEmail(req.body.email, users);
+  if (user === undefined || !passwordLookup(user, req.body.password)) {
     const templateVars = { error: "Either your email or password is incorrect.", user: users[req.session['user_id']] };
     res.render("login", templateVars);
   } else {
@@ -193,7 +185,7 @@ app.post("/register", (req, res) => {
   if (req.body.email === "" || req.body.password === "") {
     const templateVars = { user: users[req.session['user_id']], error: "You can't have a blank email or password field." };
     res.render("register", templateVars);
-  } else if (emailLookup(req.body.email)) {
+  } else if (getUserByEmail(req.body.email, users) !== undefined) {
     const templateVars = { user: users[req.session["user_id"]], error: "This email has already been used for registration." };
     res.render("register", templateVars);
   } else {
