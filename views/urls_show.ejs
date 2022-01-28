@@ -20,7 +20,7 @@
               <p>There's no going back after this, and you'll lose the TinyURL and the statistics with it.</p>
             </div>
             <div class="modal-footer">
-              <form method="POST" action="/urls/<%= shortURL %>/delete"><button type="submit" class="btn btn-outline-danger">Delete anyway</button></form>
+              <form method="POST" action="/urls/<%= shortURL %>?_method=DELETE"><button type="submit" class="btn btn-outline-danger">Delete anyway</button></form>
               <button class="btn btn-warning" type="button" data-dismiss="modal">Go back</button>
             </div>
           </div>
@@ -35,7 +35,7 @@
               <button class="close" type="button" data-dismiss="modal" aria-label="close">&times;</button>
             </div>
             <div class="modal-body">
-              <form action="/urls/<%= shortURL %>" method="POST" id="editForm">
+              <form action="/urls/<%= shortURL %>?_method=PUT" method="POST" id="editForm">
                 <div class="form-group row">
                   <label for="currentURL" class="col-form-label col-sm-2">Current URL</label>
                   <div class="com-sm-10">

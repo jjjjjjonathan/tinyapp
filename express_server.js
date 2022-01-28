@@ -3,11 +3,14 @@ const bodyParser = require("body-parser");
 const cookieSession = require('cookie-session');
 const bcrypt = require("bcryptjs");
 const { getUserByEmail } = require("./helpers");
+const methodOverride = require("method-override");
 const app = express();
 app.use(cookieSession({
   name: "session",
   keys: ["be28c579-2a86-447e-8481-98d59a9d4333", "f3d68b93-86f0-4f22-95e2-cc3087447f5f"]
 }));
+app.use(methodOverride('_method'));
+
 const PORT = 8080; // default port 8080
 
 app.set("view engine", "ejs");
@@ -18,13 +21,7 @@ app.listen(PORT, () => {
 
 // Objects
 
-const urlDatabase = {
-  "b2xVn2": {
-    longURL: "http://www.lighthouselabs.ca",
-    userID: "test"
-  }
-};
-
+const urlDatabase = {};
 const users = {};
 
 // Functions
@@ -107,7 +104,7 @@ app.get("/urls/:shortURL", (req, res) => {
   }
 });
 
-app.post("/urls/:shortURL", (req, res) => {
+app.put("/urls/:shortURL", (req, res) => {
   if (urlDatabase[req.params.shortURL] === undefined) {
     res.status(404).send("This page doesn't exist.");
   } else if (urlDatabase[req.params.shortURL]["userID"] !== req.session['user_id']) {
@@ -118,7 +115,7 @@ app.post("/urls/:shortURL", (req, res) => {
   }
 });
 
-app.post("/urls/:shortURL/delete", (req, res) => {
+app.delete("/urls/:shortURL", (req, res) => {
   if (urlDatabase[req.params.shortURL] === undefined) {
     res.status(404).send("This page doesn't exist.");
   } else if (urlDatabase[req.params.shortURL]["userID"] !== req.session['user_id']) {
